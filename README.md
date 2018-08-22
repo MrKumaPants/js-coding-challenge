@@ -4,7 +4,7 @@ Create a chrome extension that displays an HTTP request maker for any given [OAS
 
 ## Instructions
 
-1. Create a **private** Github repository called "Stoplight Coding Challenge" and invite me: [https://github.com/lottamus](https://github.com/lottamus)
+1. Create a Github repository called "Stoplight Coding Challenge" and invite me: [https://github.com/lottamus](https://github.com/lottamus)
 2. Clone this repository and push the code to your new repository.
 3. Install all the dependencies: `yarn`
 4. [Load the extension in Chrome](#load-the-extension-in-chrome)
