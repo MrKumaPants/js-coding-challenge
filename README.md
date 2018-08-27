@@ -12,13 +12,17 @@ Create a chrome extension that displays an HTTP request maker for any given [OAS
 
 ## Requirements
 
-- [ ] Uses [TypeScript](https://github.com/Microsoft/TypeScript), [React](https://github.com/facebook/react), and [MobX](https://github.com/mobxjs/mobx).
+- [ ] Uses [React](https://github.com/facebook/react) and a state management library such as [MobX](https://github.com/mobxjs/mobx) or [Redux](https://redux.js.org/).
 
 - [ ] Displays an interactive UI for creating HTTP requests to each operation in an OAS 2.0 file.
 
 - [ ] Displays the response after each HTTP request.
 
-- [ ] Clean UI/UX, well tested, and production ready.
+- [ ] A UI/UX that you're proud of.
+
+## Bonus (not required)
+
+- [ ] Uses [TypeScript](https://github.com/Microsoft/TypeScript)
 
 ## Project Structure
 * `src`: TypeScript source files
