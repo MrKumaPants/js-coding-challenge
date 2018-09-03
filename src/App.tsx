@@ -1,11 +1,11 @@
 import * as React from "react";
-
 import { inject, observer } from "mobx-react";
-
 import { IAppProps, IAppState } from "./types";
 
 const logo = require("../public/icon.png");
 const appStyles = require("./styles/App.css");
+
+import PathList from "./features/PathList";
 
 @inject("appStore")
 @observer
@@ -13,7 +13,7 @@ class App extends React.Component<IAppProps, IAppState> {
   public render() {
     const { appStore } = this.props;
 
-    console.log("Here's the spec:", appStore.spec);
+    console.log("Here's the spec:", appStore);
 
     return (
       <div className={appStyles.app}>
@@ -21,15 +21,7 @@ class App extends React.Component<IAppProps, IAppState> {
           <img src={logo} className={appStyles.appLogo} alt="logo" />
           <h1>Stoplight Coding Challenge</h1>
         </div>
-
-        <p className={appStyles.appIntro}>
-          To get started, edit <code>src/App.tsx</code>
-        </p>
-
-        <p>
-          Right click and select <strong>Inspect</strong> to open DevTools. In
-          DevTools, press <code>Ctrl+R</code> to reload
-        </p>
+        <PathList spec={appStore.spec} />
       </div>
     );
   }

@@ -1,4 +1,6 @@
-html, body, :global(#root) {
+html,
+body,
+:global(#root) {
   width: 800px;
   height: 600px;
 }

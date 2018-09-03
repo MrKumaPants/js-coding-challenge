@@ -64,22 +64,22 @@ const buildConfig: webpack.Configuration = {
         }
       }
     ]
-  } as webpack.NewModule,
+  } as any,
   output: {
     filename: "[name].js",
     path: path.join(__dirname, "dist")
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      chunks: ["background", "content"],
-      minChunks: 2,
-      name: "common"
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      chunks: ["popup"],
-      minChunks: 2,
-      name: "common"
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   chunks: ["background", "content"],
+    //   minChunks: 2,
+    //   name: "common"
+    // }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   chunks: ["popup"],
+    //   minChunks: 2,
+    //   name: "common"
+    // }),
     new CopyWebpackPlugin([
       {
         context: "public",
@@ -106,7 +106,7 @@ if (isProd()) {
     new webpack.optimize.UglifyJsPlugin()
   ]);
 } else {
-  const buildConfigModule = buildConfig.module as webpack.NewModule;
+  const buildConfigModule = buildConfig.module as any;
   buildConfigModule.rules = (buildConfigModule.rules || []).concat([
     {
       enforce: "pre",

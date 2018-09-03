@@ -2,6 +2,7 @@
  * This script will run on the parent window.
  */
 
+import * as SwaggerParser from "swagger-parser";
 import { ISpec } from "./types";
 
 function getTextContent() {
@@ -24,14 +25,14 @@ function getTextContent() {
   return null;
 }
 
-function getSpec() {
+async function getSpec() {
   const text = getTextContent();
   if (!text) return;
 
   let spec: ISpec;
 
   try {
-    spec = JSON.parse(text);
+    spec = await SwaggerParser.validate(JSON.parse(text));
 
     chrome.runtime.sendMessage({ spec });
   } catch (error) {
