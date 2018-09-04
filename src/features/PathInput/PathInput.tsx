@@ -89,11 +89,7 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
     const values = {};
     _.each(parameters, (parameter: Parameter) => {
       const key = `${parameter.in}_${parameter.name}`;
-      if ("type" in parameter && parameter.type === "boolean") {
-        values[key] = false;
-      } else {
-        values[key] = "";
-      }
+      values[key] = "";
     });
     return values;
   };
@@ -110,8 +106,7 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
           _.each(value.schema!.properties, (property: Schema, name: string) => {
             const parameter = {
               name,
-              required:
-                _.indexOf(value.schema.required, name) >= 0 ? true : false,
+              required: _.indexOf(value.schema.required, name) >= 0,
               in: value.in,
               type: _.isArray(property.type) ? property.type![0] : property.type
             };

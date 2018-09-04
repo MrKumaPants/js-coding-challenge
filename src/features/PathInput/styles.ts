@@ -18,6 +18,7 @@ export default (theme: Theme) =>
     },
     textField: {
       marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit
+      marginRight: theme.spacing.unit,
+      width: "200px"
     }
   });
