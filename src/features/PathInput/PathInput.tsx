@@ -8,7 +8,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { FastField as Field, Formik, Form } from "formik";
 import ReactJson from "react-json-view";
 
-import { Parameter, Schema } from "swagger-schema-official";
+import { Parameter, Schema, PathParameter } from "swagger-schema-official";
 
 import MaterialInput from "./MaterialInput";
 import styles from "./styles";
@@ -82,21 +82,38 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
     );
   };
 
+  private getInitialValues = (parameters?: Parameter[]) => {
+    if (!parameters) {
+      return {};
+    }
+    const values = {};
+    _.each(parameters, (parameter: Parameter) => {
+      const key = `${parameter.in}_${parameter.name}`;
+      if ("type" in parameter && parameter.type === "boolean") {
+        values[key] = false;
+      } else {
+        values[key] = "";
+      }
+    });
+    return values;
+  };
+
   private transformParameters = (parameters?: Parameter[]) => {
     if (!parameters) {
       return [];
     }
 
-    return _.transform<any, Parameter>(
+    return _.transform<any, PathParameter>(
       parameters,
-      (result: Parameter[], value: Parameter, key: string) => {
+      (result: PathParameter[], value: any, key: string) => {
         if (value && "schema" in value) {
           _.each(value.schema!.properties, (property: Schema, name: string) => {
-            const parameter: Parameter = {
+            const parameter = {
               name,
-              required: _.find(value.schema!.required, name) ? true : false,
+              required:
+                _.indexOf(value.schema.required, name) >= 0 ? true : false,
               in: value.in,
-              type: property.type![0]
+              type: _.isArray(property.type) ? property.type![0] : property.type
             };
             result.push(parameter);
           });
@@ -113,12 +130,13 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
     const { result } = this.state;
 
     const parameters = this.transformParameters(path.parameters);
+    const initialValues = this.getInitialValues(parameters);
 
     return (
       <div className={classes.root}>
         <Grid item xs={6}>
           <Formik
-            initialValues={{}}
+            initialValues={initialValues}
             onSubmit={this.onSubmit}
             render={(formik: any) => (
               <Form>
