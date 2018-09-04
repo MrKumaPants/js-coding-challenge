@@ -1,5 +1,6 @@
 import * as React from "react";
 import { inject, observer } from "mobx-react";
+import { CssBaseline } from "@material-ui/core";
 import { IAppProps, IAppState } from "./types";
 
 const logo = require("../../../public/icon.png");
@@ -14,13 +15,16 @@ class App extends React.Component<IAppProps, IAppState> {
     const { appStore } = this.props;
 
     return (
-      <div className={appStyles.app}>
-        <div className={appStyles.appHeader}>
-          <img src={logo} className={appStyles.appLogo} alt="logo" />
-          <h1>Stoplight Coding Challenge</h1>
+      <React.Fragment>
+        <CssBaseline />
+        <div className={appStyles.app}>
+          <div className={appStyles.appHeader}>
+            <img src={logo} className={appStyles.appLogo} alt="logo" />
+            <h1>Stoplight Coding Challenge</h1>
+          </div>
+          <PathList spec={appStore.spec} />
         </div>
-        <PathList spec={appStore.spec} />
-      </div>
+      </React.Fragment>
     );
   }
 }

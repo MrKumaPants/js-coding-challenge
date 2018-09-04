@@ -42,9 +42,15 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
       result = await axios({
         method: path.operation,
         url,
-        params,
+        params: {
+          ...axios.defaults.params,
+          ...params
+        },
         data
       });
+      if (result.data === "") {
+        result.data = {};
+      }
     } catch (e) {
       result = e.response;
     }
@@ -65,7 +71,7 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
               label={parameter.name}
               helperText={parameter.description ? parameter.description : null}
               required={parameter.required}
-              type={"type" in parameter ? parameter : null}
+              type={"type" in parameter ? parameter.type : "string"}
               component={MaterialInput}
             />
           );
@@ -88,7 +94,7 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
               name,
               required: _.find(value.schema!.required, name) ? true : false,
               in: value.in,
-              type: property.type
+              type: property.type![0]
             };
             result.push(parameter);
           });
@@ -129,15 +135,15 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
         </Grid>
         <Grid item xs={6}>
           <div className={classes.paper}>
-            <Typography component="div">
-              {result.data ? (
+            {result.data ? (
+              <Typography component="div">
                 <ReactJson
                   src={result.data}
                   name={false}
                   displayDataTypes={false}
                 />
-              ) : null}
-            </Typography>
+              </Typography>
+            ) : null}
           </div>
         </Grid>
       </div>
