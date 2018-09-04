@@ -15,6 +15,7 @@ import { IResponseProps } from "./types";
 const getTooltip = (code: string, response: Response) => {
   let examples = response.examples ? response.examples["application/json"] : {};
   if (_.isArray(examples)) {
+    // Cut array down to prevent tooltip popup from being too big
     examples = [examples[0]];
   }
   return (

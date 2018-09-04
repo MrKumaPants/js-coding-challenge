@@ -20,6 +20,8 @@ import PathInput from "../PathInput";
 import Responses from "../Responses";
 
 const transformPaths = (paths: { [pathName: string]: Path }) => {
+  // Convert the paths/operation nested objects into a single level
+  // object for easier parsing
   return _.transform(
     paths,
     (
@@ -30,6 +32,7 @@ const transformPaths = (paths: { [pathName: string]: Path }) => {
       const operations = _.keys(_.omit(value, "parameters"));
       _.each(operations, (o: any) => {
         const operation = value[o] as Operation;
+        // Add in base path parameters with operation level parameters
         if (value.parameters) {
           if (operation.parameters) {
             operation.parameters = _.concat(
@@ -40,6 +43,7 @@ const transformPaths = (paths: { [pathName: string]: Path }) => {
             operation.parameters = value.parameters;
           }
         }
+        //
         result[operation.operationId as string] = {
           ...operation,
           operation: o,

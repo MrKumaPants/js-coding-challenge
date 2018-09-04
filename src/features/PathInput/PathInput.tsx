@@ -87,6 +87,8 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
       return {};
     }
     const values = {};
+    // Form fields need initial values to stay as controlled input
+    // Since these are dynamic, we need to build this up
     _.each(parameters, (parameter: Parameter) => {
       const key = `${parameter.in}_${parameter.name}`;
       values[key] = "";
@@ -99,6 +101,7 @@ class PathInput extends React.Component<IPathInputProps, IPathInputState> {
       return [];
     }
 
+    // Transform linked objects in parameters that contain schemas into flattened parameters
     return _.transform<any, PathParameter>(
       parameters,
       (result: PathParameter[], value: any, key: string) => {
