@@ -1,4 +1,5 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import axios, { AxiosResponse } from "axios";
 import * as _ from "lodash";
 
@@ -13,6 +14,7 @@ import MaterialInput from "./MaterialInput";
 import styles from "./styles";
 import { IPathInputProps, IPathInputState } from "./types";
 
+@observer
 class PathInput extends React.Component<IPathInputProps, IPathInputState> {
   public state = {
     result: {} as AxiosResponse

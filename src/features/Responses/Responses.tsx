@@ -1,4 +1,5 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import * as _ from "lodash";
 import * as status from "http-status";
 
@@ -64,4 +65,4 @@ const Responses = (props: IResponseProps) => {
   );
 };
 
-export default withStyles(styles)(Responses);
+export default withStyles(styles)(observer(Responses));

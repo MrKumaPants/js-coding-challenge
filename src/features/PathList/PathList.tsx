@@ -1,4 +1,5 @@
 import * as React from "react";
+import { observer } from "mobx-react";
 import * as _ from "lodash";
 
 import {
@@ -78,4 +79,4 @@ const PathList = (props: IPathListProps) => {
   );
 };
 
-export default withStyles(styles)(PathList);
+export default withStyles(styles)(observer(PathList));
