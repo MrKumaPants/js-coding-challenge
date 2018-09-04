@@ -26,7 +26,6 @@ const getTooltip = (code: string, response: Response) => {
         <ReactJson
           src={examples}
           name={false}
-          indentWidth={2}
           enableClipboard={false}
           displayDataTypes={false}
         />
