@@ -1,13 +1,4 @@
-import { Spec } from "swagger-schema-official";
-
-export type ISpec = Spec;
-
-export interface IApp {
-  spec: ISpec;
-}
-
-export interface IAppProps {
-  appStore: IApp;
-}
-
-export interface IAppState {}
+export * from "./features/App/types";
+export * from "./features/PathInput/types";
+export * from "./features/PathList/types";
+export * from "./features/Responses/types";

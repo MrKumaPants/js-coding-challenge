@@ -1,4 +1,4 @@
-import { IApp, ISpec } from "../types";
+import { IApp, ISpec } from "./types";
 
 export class App implements IApp {
   public spec: ISpec;

@@ -6,9 +6,12 @@ import { Chip, Tooltip, Typography } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ReactJson from "react-json-view";
 
-import styles from "./styles";
+import { Response } from "swagger-schema-official";
 
-const getTooltip = (code: string, response: any) => {
+import styles from "./styles";
+import { IResponseProps } from "./types";
+
+const getTooltip = (code: string, response: Response) => {
   let examples = response.examples ? response.examples["application/json"] : {};
   if (_.isArray(examples)) {
     examples = [examples[0]];
@@ -40,7 +43,7 @@ const responseColor = (code: string) => {
   return "default";
 };
 
-const Responses = (props: any) => {
+const Responses = (props: IResponseProps) => {
   const { classes, responses } = props;
 
   return (

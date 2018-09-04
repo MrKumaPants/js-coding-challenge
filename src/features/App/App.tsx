@@ -2,18 +2,16 @@ import * as React from "react";
 import { inject, observer } from "mobx-react";
 import { IAppProps, IAppState } from "./types";
 
-const logo = require("../public/icon.png");
-const appStyles = require("./styles/App.css");
+const logo = require("../../../public/icon.png");
+const appStyles = require("./styles.css");
 
-import PathList from "./features/PathList";
+import PathList from "../PathList";
 
 @inject("appStore")
 @observer
 class App extends React.Component<IAppProps, IAppState> {
   public render() {
     const { appStore } = this.props;
-
-    console.log("Here's the spec:", appStore);
 
     return (
       <div className={appStyles.app}>

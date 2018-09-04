@@ -1,6 +1,6 @@
-import { IApp } from "../types";
+import { IApp } from "./types";
 
-import { App } from "./app";
+import { App } from "./features/App/store";
 
 export const createStores = (initialState: IApp) => {
   return {

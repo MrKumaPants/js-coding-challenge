@@ -1,41 +1,24 @@
 import * as React from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import * as _ from "lodash";
 
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { FastField as Field, Formik, Form } from "formik";
 import ReactJson from "react-json-view";
 
+import { Parameter, Schema } from "swagger-schema-official";
+
+import MaterialInput from "./MaterialInput";
 import styles from "./styles";
+import { IPathInputProps, IPathInputState } from "./types";
 
-interface IPathInputState {
-  loading: boolean;
-  result: any;
-}
-
-const MaterialInput = ({
-  field: { ...fields },
-  form: { touched, errors, ...rest },
-  ...props
-}: any) => {
-  return (
-    <TextField
-      {...props}
-      {...fields}
-      error={Boolean(touched[fields.name] && errors[fields.name])}
-      helperText={touched[fields.name] && errors[fields.name]}
-    />
-  );
-};
-
-class PathInput extends React.Component<any, IPathInputState> {
-  state = {
-    loading: false,
-    result: {} as any
+class PathInput extends React.Component<IPathInputProps, IPathInputState> {
+  public state = {
+    result: {} as AxiosResponse
   };
 
-  private onSubmit = async (values: any, actions: any) => {
+  private onSubmit = async (values: any) => {
     const { path } = this.props;
 
     let url = path.path;
@@ -43,20 +26,18 @@ class PathInput extends React.Component<any, IPathInputState> {
     const data = {};
 
     _.each(values, (value, key) => {
-      const inValue = _.split(key, "_");
+      const [type, param] = _.split(key, "_");
 
-      if (inValue[0] === "path") {
-        url = _.replace(url, `{${inValue[1]}}`, value);
-      } else if (inValue[0] === "query") {
-        params[inValue[1]] = value;
-      } else if (inValue[0] === "body") {
-        data[inValue[1]] = value;
+      if (type === "path") {
+        url = _.replace(url, `{${param}}`, value);
+      } else if (type === "query") {
+        params[param] = value;
+      } else if (type === "body") {
+        data[param] = value;
       }
     });
 
-    this.setState({ loading: true });
-
-    let result;
+    let result: AxiosResponse;
     try {
       result = await axios({
         method: path.operation,
@@ -68,22 +49,23 @@ class PathInput extends React.Component<any, IPathInputState> {
       result = e.response;
     }
 
-    this.setState({ loading: false, result });
+    this.setState({ result });
   };
 
-  private getParameters = (parameters: any) => {
+  private getParameters = (parameters: Parameter[]) => {
     const { classes } = this.props;
     return (
       <div>
-        {_.map(parameters, parameter => {
+        {_.map(parameters, (parameter: Parameter) => {
           return (
             <Field
               className={classes.textField}
+              key={parameter.name}
               name={`${parameter.in}_${parameter.name}`}
               label={parameter.name}
               helperText={parameter.description ? parameter.description : null}
               required={parameter.required}
-              type={parameter.type}
+              type={"type" in parameter ? parameter : null}
               component={MaterialInput}
             />
           );
@@ -92,16 +74,21 @@ class PathInput extends React.Component<any, IPathInputState> {
     );
   };
 
-  private transformParameters = (parameters: any) => {
-    return _.transform(
+  private transformParameters = (parameters?: Parameter[]) => {
+    if (!parameters) {
+      return [];
+    }
+
+    return _.transform<any, Parameter>(
       parameters,
-      (result: Array<object>, value: any, key: string) => {
-        if (value.schema) {
-          _.each(value.schema.properties, (property, name) => {
-            const parameter = {
+      (result: Parameter[], value: Parameter, key: string) => {
+        if (value && "schema" in value) {
+          _.each(value.schema!.properties, (property: Schema, name: string) => {
+            const parameter: Parameter = {
               name,
-              required: _.find(value.required, name) ? true : false,
-              in: value.in
+              required: _.find(value.schema!.required, name) ? true : false,
+              in: value.in,
+              type: property.type
             };
             result.push(parameter);
           });
@@ -115,7 +102,7 @@ class PathInput extends React.Component<any, IPathInputState> {
 
   public render() {
     const { classes, path } = this.props;
-    const { loading, result } = this.state;
+    const { result } = this.state;
 
     const parameters = this.transformParameters(path.parameters);
 
@@ -143,7 +130,7 @@ class PathInput extends React.Component<any, IPathInputState> {
         <Grid item xs={6}>
           <div className={classes.paper}>
             <Typography component="div">
-              {!loading && result.data ? (
+              {result.data ? (
                 <ReactJson
                   src={result.data}
                   name={false}

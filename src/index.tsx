@@ -8,7 +8,7 @@ import axios from "axios";
 
 import { createStores } from "./stores";
 
-import App from "./App";
+import App from "./features/App/App";
 
 // enforce usage of mobx actions
 configure({ enforceActions: "observed" });

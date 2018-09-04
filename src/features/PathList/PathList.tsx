@@ -10,19 +10,25 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import withStyles from "@material-ui/core/styles/withStyles";
 
+import { Operation, Path } from "swagger-schema-official";
+
 import styles from "./styles";
-import { IPathListProps } from "./types";
+import { IPathListProps, TransformedPath } from "./types";
 
 import PathInput from "../PathInput";
 import Responses from "../Responses";
 
-const transformPaths = (paths: any) => {
+const transformPaths = (paths: { [pathName: string]: Path }) => {
   return _.transform(
     paths,
-    (result: object, value: any, key: string) => {
+    (
+      result: { [operationid: string]: TransformedPath },
+      value: Path,
+      key: string
+    ) => {
       const operations = _.keys(_.omit(value, "parameters"));
       _.each(operations, (o: any) => {
-        const operation = value[o];
+        const operation = value[o] as Operation;
         if (value.parameters) {
           if (operation.parameters) {
             operation.parameters = _.concat(
@@ -32,9 +38,8 @@ const transformPaths = (paths: any) => {
           } else {
             operation.parameters = value.parameters;
           }
-          console.log(operation.parameters);
         }
-        result[operation.operationId] = {
+        result[operation.operationId as string] = {
           ...operation,
           operation: o,
           path: key
